@@ -42,12 +42,7 @@ jobs:
         FunctionName: invokeDatafoldAirflowStagingDAG
         Payload: '{ "schema_name_postfix": "_PR_NUM_${{ steps.findPr.outputs.pr }}" }'
 
-    - name: Check out master/main branch
-      run: datafold ci submit \
-    --ci-config-id 286 \
-    --pr-num {{ steps.findPr.outputs.pr }} <<- EOF
-[{
-        "prod": "DEMO"."DATAFOLD_AIRFLOW"."FORESTFIRES",
-        "pr": "DEMO"."DATAFOLD_AIRFLOW_PR_NUM_${{ steps.findPr.outputs.pr }}"."FORESTFIRES",
-        "pk": ["ID"]
-}]
+    - name: Kick off Datafold CI Run
+      run: |
+      datafold ci submit --ci-config-id 286 --pr-num {{ steps.findPr.outputs.pr }} <<- '[{ "prod": "DEMO"."DATAFOLD_AIRFLOW"."FORESTFIRES", "pr": "DEMO"."DATAFOLD_AIRFLOW_PR_NUM_${{ steps.findPr.outputs.pr }}"."FORESTFIRES", "pk": ["ID"] }]'
+
