@@ -1,4 +1,4 @@
-name: CI for MWAA
+name: CI for MWAA Staging
 
 on:
   pull_request:
