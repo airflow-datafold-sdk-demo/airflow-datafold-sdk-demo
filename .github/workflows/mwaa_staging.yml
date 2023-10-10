@@ -16,9 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - name: install Datafold SDK
-        id: install-reqs
-        run: pip install datafold-sdk
+    - name: install Datafold SDK
+      id: install-reqs
+      run: pip install datafold-sdk
 
 
     - uses: actions/checkout@main
