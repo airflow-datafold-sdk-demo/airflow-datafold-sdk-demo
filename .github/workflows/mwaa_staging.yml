@@ -43,7 +43,6 @@ jobs:
         REGION: 'us-west-2'
         FunctionName: invokeDatafoldAirflowStagingDAG
         Payload: '{ "schema_name_postfix": "_PR_NUM_${{ steps.findPr.outputs.pr }}" }'
-    
 
     - name: Identify diffed SQL files
       # - git diff main --name-only
@@ -51,6 +50,9 @@ jobs:
       # - remove lines not containing .sql 
       # - remove dags/ prefix and .sql suffix
       run: echo $(git diff $(git rev-parse --abbrev-ref HEAD) origin/${{ github.base_ref }} -- --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"  > ./git-diff.txt
+
+    - name: cat the file that was just created
+      run: cat ./git-diff.txt
 
     - name: Store diffs in file
       run: echo '[{ "prod":"DEMO.DATAFOLD_AIRFLOW.FORESTFIRES", "pr":"DEMO.DATAFOLD_AIRFLOW_PR_NUM_${{ steps.findPr.outputs.pr }}.FORESTFIRES", "pk":["ID"] }]' > ./diffs.txt
