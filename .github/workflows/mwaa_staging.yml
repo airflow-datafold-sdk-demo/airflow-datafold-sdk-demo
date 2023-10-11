@@ -56,7 +56,7 @@ jobs:
       run: echo "test=$(cat ./git-diff.txt)" >> $GITHUB_OUTPUT
     
     - name: Test output
-      run: echo "test output"
+      run: echo "$(cat ./git-diff.txt)"
      # run: echo ${{ steps.cat.outputs.test }}
 
     - name: Store diffs in file
