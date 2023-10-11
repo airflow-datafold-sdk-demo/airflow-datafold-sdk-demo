@@ -49,8 +49,8 @@ jobs:
       # - change spaces into new lines
       # - remove lines not containing .sql 
       # - remove dags/ prefix and .sql suffix
-      run: echo $(git diff $(git rev-parse --abbrev-ref HEAD) origin/${{ github.base_ref }} -- --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"  > ./git-diff.txt
-
+      run: echo $(git diff ${{ github.base_ref }} --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"  > ./git-diff.txt
+# echo $(git diff main --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"
     - name: cat the file that was just created
       id: cat
       run: echo "test=$(cat ./git-diff.txt)" >> $GITHUB_OUTPUT
