@@ -48,7 +48,7 @@ jobs:
     - name: Identify diffed SQL files
       # - git diff main --name-only
       # - change spaces into new lines
-      # - remove lines not containing .sql
+      # - remove lines not containing .sql 
       # - remove dags/ prefix and .sql suffix
       run: echo $(git diff $(git rev-parse --abbrev-ref HEAD) origin/main --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"  > ./git-diff.txt
     
