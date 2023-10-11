@@ -91,8 +91,8 @@ with DAG(
             }, 
     )
     create_squirrels_table = SnowflakeOperator(
-        task_id="create_squirrels_table.sql",
-        sql='squirrels.sql',
+        task_id="create_squirrels_table",
+        sql='create_squirrels_table.sql',
         params={
             "table_name": "bears", # Eventually, this should be replaced by some non-value.
             "schema_name_postfix":"" # The postfix is added to the production schema name
