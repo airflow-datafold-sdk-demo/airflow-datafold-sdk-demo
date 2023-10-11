@@ -44,4 +44,6 @@ jobs:
 
     - name: Kick off Datafold CI Run
       run: datafold ci submit --ci-config-id 286 --pr-num {{ steps.findPr.outputs.pr }} [{ "prod":"DEMO"."DATAFOLD_AIRFLOW"."FORESTFIRES", "pr":"DEMO"."DATAFOLD_AIRFLOW_PR_NUM_${{ steps.findPr.outputs.pr }}"."FORESTFIRES", "pk":["ID"] }]
+      env:
+        DATAFOLD_API_KEY: ${{ secrets.DATAFOLD_API_KEY }}
 
