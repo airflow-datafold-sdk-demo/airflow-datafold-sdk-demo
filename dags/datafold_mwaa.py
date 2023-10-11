@@ -17,7 +17,7 @@ CREATE_FORESTFIRES_TABLE = """
     CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }}
         (
             id INT,
-            leo INT,
+            ruth INT,
             month VARCHAR(25),
             day VARCHAR(25),
             ffmc FLOAT,
@@ -71,7 +71,7 @@ with DAG(
     )
 
     """
-    #### Snowflake table creation
+    #### Snowflake tables creation
     Create the tables to store sample data.
     """
     create_forestfires_table = SnowflakeOperator(
@@ -90,13 +90,21 @@ with DAG(
             "schema_name_postfix":"" # The postfix is added to the production schema name
             }, 
     )
+    create_squirrels_table = SnowflakeOperator(
+        task_id="create_squirrels_table.sql",
+        sql='squirrels.sql',
+        params={
+            "table_name": "bears", # Eventually, this should be replaced by some non-value.
+            "schema_name_postfix":"" # The postfix is added to the production schema name
+            }, 
+    )
     begin = EmptyOperator(task_id="begin")
     end = EmptyOperator(task_id="end")
 
     chain(
         begin,
         create_pr_schema,
-        [create_forestfires_table,create_bears_table],
+        [create_forestfires_table,create_bears_table,create_squirrels_table],
         end,
     )
     
