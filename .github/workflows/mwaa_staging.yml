@@ -51,10 +51,7 @@ jobs:
       # - remove dags/ prefix and .sql suffix
       run: echo $(git diff origin/${{ github.base_ref }} --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"  > ./git-diff.txt
 # echo $(git diff origin/main --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"
-    - name: cat the file that was just created
-      id: cat
-      run: echo "test=$(cat ./git-diff.txt)" >> $GITHUB_OUTPUT
-    
+
     - name: Test output
       run: echo "$(cat ./git-diff.txt)"
      # run: echo ${{ steps.cat.outputs.test }}
