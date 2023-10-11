@@ -42,6 +42,9 @@ jobs:
         FunctionName: invokeDatafoldAirflowStagingDAG
         Payload: '{ "schema_name_postfix": "_PR_NUM_${{ steps.findPr.outputs.pr }}" }'
     
+    - name: Fetch git branches from origin
+      run: git fetch origin main:refs/remotes/origin/main
+      
     - name: Identify diffed SQL files
       # - git diff main --name-only
       # - change spaces into new lines
