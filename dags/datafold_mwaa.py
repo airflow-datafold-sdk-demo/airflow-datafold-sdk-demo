@@ -13,11 +13,11 @@ PROD_DAG_SCHEDULE="*/35 * * * *"
 CREATE_PR_SCHEMA = """
     CREATE SCHEMA IF NOT EXISTS DATAFOLD_AIRFLOW{{ params.schema_name_postfix }};
 """
-CREATE_FORESTFIRE_TABLE = """
+CREATE_FORESTFIRES_TABLE = """
     CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }}
         (
             id INT,
-            jeremy INT,
+            leo INT,
             month VARCHAR(25),
             day VARCHAR(25),
             ffmc FLOAT,
@@ -29,6 +29,19 @@ CREATE_FORESTFIRE_TABLE = """
             wind FLOAT,
             rain FLOAT,
             area FLOAT
+        );
+"""
+
+CREATE_BEARS_TABLE = """
+    CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }}
+        (
+            id INT,
+            name INT,
+            name VARCHAR(25),
+            species VARCHAR(25),
+            weight INT,
+            length FLOAT,
+            hobby VARCHAR(25)
         );
 """
 
@@ -54,7 +67,6 @@ with DAG(
         task_id="create_pr_schema",
         sql=CREATE_PR_SCHEMA,
         params={
-            #"table_name": "forestfires", # Eventually, this should be replaced by some non-value.
             "schema_name_postfix":"" # The postfix is added to the production schema name
             },
     )
@@ -63,22 +75,29 @@ with DAG(
     #### Snowflake table creation
     Create the tables to store sample data.
     """
-    create_forestfire_table = SnowflakeOperator(
-        task_id="create_forestfire_table",
-        sql=CREATE_FORESTFIRE_TABLE,
+    create_forestfires_table = SnowflakeOperator(
+        task_id="create_forestfires_table",
+        sql=CREATE_FORESTFIRES_TABLE,
         params={
             "table_name": "forestfires", # Eventually, this should be replaced by some non-value.
             "schema_name_postfix":"" # The postfix is added to the production schema name
             }, 
     )
-
+    create_bears_table = SnowflakeOperator(
+        task_id="create_bears_table",
+        sql=CREATE_BEARS_TABLE,
+        params={
+            "table_name": "bears", # Eventually, this should be replaced by some non-value.
+            "schema_name_postfix":"" # The postfix is added to the production schema name
+            }, 
+    )
     begin = EmptyOperator(task_id="begin")
     end = EmptyOperator(task_id="end")
 
     chain(
         begin,
         create_pr_schema,
-        create_forestfire_table,
+        [create_forestfires_table,create_bears_table],
         end,
     )
     
