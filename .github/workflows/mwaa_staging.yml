@@ -21,9 +21,10 @@ jobs:
       run: pip install datafold-sdk
 
     - uses: actions/checkout@main
-    - uses: jakejarvis/s3-sync-action@master
       with:
         fetch-depth: 0
+    - uses: jakejarvis/s3-sync-action@master
+      with:
         args: --acl private --follow-symlinks --delete --exclude '.git/*'
       env:
         AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET_STAGING }}
