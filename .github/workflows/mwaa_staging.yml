@@ -56,7 +56,8 @@ jobs:
       run: echo "test=$(cat ./git-diff.txt)" >> $GITHUB_OUTPUT
     
     - name: Test output
-      run: echo ${{ steps.cat.outputs.test }}
+      run: echo "test output"
+     # run: echo ${{ steps.cat.outputs.test }}
 
     - name: Store diffs in file
       run: echo '[{ "prod":"DEMO.DATAFOLD_AIRFLOW.FORESTFIRES", "pr":"DEMO.DATAFOLD_AIRFLOW_PR_NUM_${{ steps.findPr.outputs.pr }}.FORESTFIRES", "pk":["ID"] }]' > ./diffs.txt
