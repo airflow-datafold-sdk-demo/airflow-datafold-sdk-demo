@@ -77,9 +77,9 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         REGION: 'us-west-2'
         FunctionName: invokeDatafoldAirflowStagingDAG
-        Payload: '{ "schema_name_postfix": "_PR_NUM_'"$OUTPUT1"'" }' 
+        Payload: '{ "schema_name_postfix": "'"$OUTPUT1"'" }' 
       env:
-        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
+        OUTPUT1: "_PR_NUM_"${{needs.get_pr_num.outputs.output1}} # this is the pr num
   
 
   diff:
