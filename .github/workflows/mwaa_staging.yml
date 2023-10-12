@@ -12,17 +12,9 @@ on:
       - '!main'
 
 jobs:
-  deploy:
+  upload_to_s3:
     runs-on: ubuntu-latest
     steps:
-
-    - uses: actions/checkout@main
-      with:
-        fetch-depth: 0
-
-    - name: install Datafold SDK
-      id: install-reqs
-      run: pip install datafold-sdk
 
     - uses: jakejarvis/s3-sync-action@master
       with:
@@ -33,12 +25,10 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: 'us-west-2'
   lambda:
-    needs: deploy
+    needs: upload_to_s3
     runs-on: ubuntu-latest
 
     steps:
-    - name: Begin lambda step
-      run: echo "This step runs after the successful S3 update and executes the lambda function"
 
     - uses: gagoar/invoke-aws-lambda@master
     # https://github.com/marketplace/actions/invoke-aws-lambda
@@ -54,11 +44,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    
+    - name: install Datafold SDK
+      id: install-reqs
+      run: pip install datafold-sdk
 
     - uses: actions/checkout@main
       with:
         fetch-depth: 0
-        
+
     - uses: jwalton/gh-find-current-pr@v1.3.0
       id: findPR
 
