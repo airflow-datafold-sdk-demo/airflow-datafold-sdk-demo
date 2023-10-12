@@ -39,16 +39,14 @@ jobs:
         FunctionName: invokeDatafoldAirflowStagingDAG
         Payload: '{ "schema_name_postfix": "_PR_NUM_${{ steps.findPr.outputs.pr }}" }'
   
-  diffing:
+
+
+  determine_what_to_diff:
     needs: lambda
     runs-on: ubuntu-latest
-
+    
     steps:
     
-    - name: install Datafold SDK
-      id: install-reqs
-      run: pip install datafold-sdk
-
     - uses: actions/checkout@main
       with:
         fetch-depth: 0
@@ -68,6 +66,20 @@ jobs:
     
     - name: add PR num to diffs file
       run: sed 's|__DATAFOLD_CI_PR_NUM|${{ steps.findPr.outputs.pr }}|g' diffs.txt > diffs_with_pr_num.txt
+
+
+  kick_off_diffs:
+    needs: determine_what_to_diff
+    runs-on: ubuntu-latest
+
+    steps: 
+
+    - uses: actions/checkout@main
+      with:
+        fetch-depth: 0
+    - name: install Datafold SDK
+      id: install-reqs
+      run: pip install datafold-sdk
 
     - name: Kick off Datafold CI Run
       run: datafold ci submit --ci-config-id 286 --pr-num ${{ steps.findPr.outputs.pr }} --diffs ./diffs_with_pr_num.txt
