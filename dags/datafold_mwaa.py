@@ -13,36 +13,6 @@ PROD_DAG_SCHEDULE="*/35 * * * *"
 CREATE_PR_SCHEMA = """
     CREATE SCHEMA IF NOT EXISTS DATAFOLD_AIRFLOW{{ params.schema_name_postfix }};
 """
-CREATE_FORESTFIRES_TABLE = """
-    CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }}
-        (
-            id INT,
-            leo INT,
-            month VARCHAR(25),
-            day VARCHAR(25),
-            ffmc FLOAT,
-            dmc FLOAT,
-            dc FLOAT,
-            isi FLOAT,
-            temp FLOAT,
-            rh FLOAT,
-            wind FLOAT,
-            rain FLOAT,
-            area FLOAT
-        );
-"""
-
-CREATE_BEARS_TABLE = """
-    CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }}
-        (
-            id INT,
-            name VARCHAR(25),
-            species VARCHAR(25),
-            weight INT,
-            length FLOAT,
-            hobby VARCHAR(25)
-        );
-"""
 
 SNOWFLAKE_CONN_ID = "snowflake_default"
 
@@ -71,12 +41,12 @@ with DAG(
     )
 
     """
-    #### Snowflake table creation
+    #### Snowflake tables creation
     Create the tables to store sample data.
     """
     create_forestfires_table = SnowflakeOperator(
         task_id="create_forestfires_table",
-        sql=CREATE_FORESTFIRES_TABLE,
+        sql='create_forestfires.sql',
         params={
             "table_name": "forestfires", # Eventually, this should be replaced by some non-value.
             "schema_name_postfix":"" # The postfix is added to the production schema name
@@ -84,9 +54,17 @@ with DAG(
     )
     create_bears_table = SnowflakeOperator(
         task_id="create_bears_table",
-        sql=CREATE_BEARS_TABLE,
+        sql='create_bears.sql',
         params={
             "table_name": "bears", # Eventually, this should be replaced by some non-value.
+            "schema_name_postfix":"" # The postfix is added to the production schema name
+            }, 
+    )
+    create_squirrels_table = SnowflakeOperator(
+        task_id="create_squirrels_table",
+        sql='create_squirrels.sql',
+        params={
+            "table_name": "squirrels", # Eventually, this should be replaced by some non-value.
             "schema_name_postfix":"" # The postfix is added to the production schema name
             }, 
     )
@@ -96,7 +74,7 @@ with DAG(
     chain(
         begin,
         create_pr_schema,
-        [create_forestfires_table,create_bears_table],
+        [create_forestfires_table,create_bears_table,create_squirrels_table],
         end,
     )
     
