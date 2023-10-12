@@ -46,7 +46,7 @@ with DAG(
     """
     create_forestfires_table = SnowflakeOperator(
         task_id="create_forestfires_table",
-        sql='create_forestfires.sql',
+        sql='forestfires.sql',
         params={
             "table_name": "forestfires", # Eventually, this should be replaced by some non-value.
             "schema_name_postfix":"" # The postfix is added to the production schema name
@@ -54,7 +54,7 @@ with DAG(
     )
     create_bears_table = SnowflakeOperator(
         task_id="create_bears_table",
-        sql='create_bears.sql',
+        sql='bears.sql',
         params={
             "table_name": "bears", # Eventually, this should be replaced by some non-value.
             "schema_name_postfix":"" # The postfix is added to the production schema name
@@ -62,7 +62,7 @@ with DAG(
     )
     create_squirrels_table = SnowflakeOperator(
         task_id="create_squirrels_table",
-        sql='create_squirrels.sql',
+        sql='squirrels.sql',
         params={
             "table_name": "squirrels", # Eventually, this should be replaced by some non-value.
             "schema_name_postfix":"" # The postfix is added to the production schema name
