@@ -15,6 +15,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+    
+    - name: execute py script # run file
+      run: |
+        python create_datafold_ci_submit_arg.py
 
     - name: install Datafold SDK
       id: install-reqs
