@@ -11,10 +11,10 @@ for item in input_data:
     pk = [item[1]]
 
     output.append({
-        "prod": prod_name,
-        "pr": pr_name,
-        "pk": pk
+        "prod":prod_name,
+        "pr":pr_name,
+        "pk":pk
     })
 
-output_json = json.dumps(output, indent=2)
+output_json = json.dumps(output, separators=(',', ':'))
 print(output_json)
