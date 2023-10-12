@@ -53,7 +53,7 @@ jobs:
       run: echo $(git diff origin/${{ github.base_ref }} --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"  > ./git-diff.txt
 
     - name: create diffs file
-      run: python python/create_datafold_ci_submit_arg.py > ./diffs.txt
+      run: python python/combined_script.py git-diff.txt > ./diffs.txt
     
     - name: add PR num to diffs file
       run: sed 's|__DATAFOLD_CI_PR_NUM|${{ steps.findPr.outputs.pr }}|g' diffs.txt > diffs_with_pr_num.txt
