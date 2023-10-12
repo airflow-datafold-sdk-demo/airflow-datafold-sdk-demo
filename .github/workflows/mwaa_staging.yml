@@ -22,8 +22,9 @@ jobs:
 
     - uses: jwalton/gh-find-current-pr@v1.3.0
     
-    - id: step1
-      run: echo "test={{ steps.findPr.outputs.pr }}" >> "$GITHUB_OUTPUT"
+    - run: echo "test={{ steps.findPr.outputs.pr }}" >> "$GITHUB_OUTPUT"
+      id: step1
+      
 
   upload_to_s3:
     needs: get_pr_num
