@@ -55,6 +55,10 @@ jobs:
 
     steps:
 
+    - uses: actions/checkout@main
+      with:
+        fetch-depth: 0
+        
     - uses: jwalton/gh-find-current-pr@v1.3.0
       id: findPR
 
