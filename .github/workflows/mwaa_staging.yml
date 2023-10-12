@@ -59,7 +59,7 @@ jobs:
       run: python python/create_datafold_ci_submit_arg.py > ./diffs.txt
     
     - name: add PR num to diffs file
-      run: sed 's|${{ steps_findPr_outputs_pr }}|$PR_NUM|g' diffs.txt > diffs2.txt
+      run: sed 's|__DATAFOLD_CI_PR_NUM|$PR_NUM|g' diffs.txt > diffs2.txt
       env:
         PR_NUM: ${{ steps.findPr.outputs.pr }}
 #    - name: Store diffs in file
