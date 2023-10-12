@@ -33,7 +33,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
+    
+    - uses: jwalton/gh-find-current-pr@v1.3.0
+      id: findPR
     - uses: gagoar/invoke-aws-lambda@master
     # https://github.com/marketplace/actions/invoke-aws-lambda
       with:
