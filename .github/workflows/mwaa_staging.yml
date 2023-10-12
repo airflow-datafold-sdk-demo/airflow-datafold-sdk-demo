@@ -13,15 +13,28 @@ on:
 
 jobs:
 
+  get_pr_num:
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.step1.outputs.test }}
+    
+    steps:
+      - id: step1
+        uses: jwalton/gh-find-current-pr@v1.3.0
+        run: echo "test={{ steps.findPr.outputs.pr }}" >> "$GITHUB_OUTPUT"
 
   upload_to_s3:
+    needs: get_pr_num
     runs-on: ubuntu-latest
+    
     steps:
+    - env:
+        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
 
     - uses: actions/checkout@main
       with:
         fetch-depth: 0
-        
+
     - uses: jakejarvis/s3-sync-action@master
       with:
         args: --acl private --follow-symlinks --delete --exclude '.git/*'
@@ -33,16 +46,17 @@ jobs:
   
   
   lambda:
-    needs: upload_to_s3
+    needs: [upload_to_s3, get_pr_num]
     runs-on: ubuntu-latest
 
     steps:
+    - env:
+        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
 
     - uses: actions/checkout@main
       with:
         fetch-depth: 0
-    - uses: jwalton/gh-find-current-pr@v1.3.0
-      id: findPR
+
     - uses: gagoar/invoke-aws-lambda@master
     # https://github.com/marketplace/actions/invoke-aws-lambda
       with:
@@ -50,21 +64,20 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         REGION: 'us-west-2'
         FunctionName: invokeDatafoldAirflowStagingDAG
-        Payload: '{ "schema_name_postfix": "_PR_NUM_${{ steps.findPr.outputs.pr }}" }'
+        Payload: '{ "schema_name_postfix": "_PR_NUM_$OUTPUT1" }'
   
 
   diff:
-    needs: lambda
+    needs: [lambda, get_pr_num]
     runs-on: ubuntu-latest
 
     steps:
-    
+    - env:
+        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
+
     - uses: actions/checkout@main
       with:
         fetch-depth: 0
-
-    - uses: jwalton/gh-find-current-pr@v1.3.0
-      id: findPR
 
     - name: Identify diffed SQL files
       # - git diff main --name-only
@@ -77,14 +90,14 @@ jobs:
       run: python python/combined_script.py git-diff.txt > ./diffs.txt
     
     - name: add PR num to diffs file
-      run: sed 's|__DATAFOLD_CI_PR_NUM|${{ steps.findPr.outputs.pr }}|g' diffs.txt > diffs_with_pr_num.txt
+      run: sed 's|__DATAFOLD_CI_PR_NUM|$OUTPUT1|g' diffs.txt > diffs_with_pr_num.txt
 
     - name: install Datafold SDK
       id: install-reqs
       run: pip install datafold-sdk
 
     - name: Kick off Datafold CI Run
-      run: datafold ci submit --ci-config-id 286 --pr-num ${{ steps.findPr.outputs.pr }} --diffs ./diffs_with_pr_num.txt
+      run: datafold ci submit --ci-config-id 286 --pr-num $OUTPUT1 --diffs ./diffs_with_pr_num.txt
       env:
         DATAFOLD_API_KEY: ${{ secrets.DATAFOLD_API_KEY }}
 
