@@ -6,5 +6,5 @@ CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix 
             weight INT,
             length FLOAT,
             hobby VARCHAR(25),
-            PRIMARY KEY (id, hobby)
+            PRIMARY KEY (id, hobby) 
         );
