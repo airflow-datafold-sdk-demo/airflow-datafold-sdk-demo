@@ -33,10 +33,10 @@ jobs:
 
     steps:
 
-    - name: test output
-      run: echo $OUTPUT1
-      env:
-        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
+  #  - name: test output
+  #    run: echo $OUTPUT1
+  #    env:
+  #      OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
       
 
 
@@ -103,7 +103,7 @@ jobs:
       run: python python/combined_script.py git-diff.txt > ./diffs.txt
     
     - name: add PR num to diffs file
-      run: sed 's|__DATAFOLD_CI_PR_NUM|$OUTPUT1|g' diffs.txt > diffs_with_pr_num.txt
+      run: sed 's|__DATAFOLD_CI_PR_NUM|${OUTPUT1}|g' diffs.txt > diffs_with_pr_num.txt
       env:
         OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
 
@@ -112,7 +112,7 @@ jobs:
       run: pip install datafold-sdk
 
     - name: Kick off Datafold CI Run
-      run: datafold ci submit --ci-config-id 286 --pr-num $OUTPUT1 --diffs ./diffs_with_pr_num.txt
+      run: datafold ci submit --ci-config-id 286 --pr-num ${OUTPUT1} --diffs ./diffs_with_pr_num.txt
       env:
         DATAFOLD_API_KEY: ${{ secrets.DATAFOLD_API_KEY }}
         OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
