@@ -12,9 +12,43 @@ on:
       - '!main'
 
 jobs:
-  upload_to_s3:
+
+  get_pr_num:
     runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.step1.outputs.test }}
+    
     steps:
+
+    - uses: jwalton/gh-find-current-pr@v1.3.0
+      id: findPR
+    
+    - run: echo "test=${{ steps.findPr.outputs.pr }}" >> "$GITHUB_OUTPUT"
+      id: step1
+      
+
+  #test:
+  #  needs: [get_pr_num]
+  #  runs-on: ubuntu-latest
+#
+#    steps:
+
+  #  - name: test output
+  #    run: echo $OUTPUT1
+  #    env:
+  #      OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
+      
+
+
+  upload_to_s3:
+    needs: get_pr_num
+    runs-on: ubuntu-latest
+    
+    steps:
+
+    - uses: actions/checkout@main
+      with:
+        fetch-depth: 0
 
     - uses: jakejarvis/s3-sync-action@master
       with:
@@ -24,11 +58,20 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: 'us-west-2'
+
+
   lambda:
-    needs: upload_to_s3
+    needs: [upload_to_s3, get_pr_num]
     runs-on: ubuntu-latest
 
     steps:
+
+    - uses: actions/checkout@main
+      with:
+        fetch-depth: 0
+    
+  #  - name: create json file
+  #    run: echo '{ "schema_name_postfix": "'$OUTPUT1'" }' | jq . > input.json
 
     - uses: gagoar/invoke-aws-lambda@master
     # https://github.com/marketplace/actions/invoke-aws-lambda
@@ -37,24 +80,21 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         REGION: 'us-west-2'
         FunctionName: invokeDatafoldAirflowStagingDAG
-        Payload: '{ "schema_name_postfix": "_PR_NUM_${{ steps.findPr.outputs.pr }}" }'
+        Payload: '{ "schema_name_postfix": "${{ env.OUTPUT1 }}" }' 
+       # Payload: $(echo '{ "schema_name_postfix": "'$OUTPUT1'" }' | jq .)
+      env:
+        OUTPUT1: "_PR_NUM_${{needs.get_pr_num.outputs.output1}}" # this is the pr num
   
-  diffing:
-    needs: lambda
+
+  diff:
+    needs: [lambda, get_pr_num]
     runs-on: ubuntu-latest
 
     steps:
-    
-    - name: install Datafold SDK
-      id: install-reqs
-      run: pip install datafold-sdk
 
     - uses: actions/checkout@main
       with:
         fetch-depth: 0
-
-    - uses: jwalton/gh-find-current-pr@v1.3.0
-      id: findPR
 
     - name: Identify diffed SQL files
       # - git diff main --name-only
@@ -67,10 +107,17 @@ jobs:
       run: python python/combined_script.py git-diff.txt > ./diffs.txt
     
     - name: add PR num to diffs file
-      run: sed 's|__DATAFOLD_CI_PR_NUM|${{ steps.findPr.outputs.pr }}|g' diffs.txt > diffs_with_pr_num.txt
+      run: sed "s|__DATAFOLD_CI_PR_NUM|$OUTPUT1|g" diffs.txt > diffs_with_pr_num.txt
+      env:
+        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
+
+    - name: install Datafold SDK
+      id: install-reqs
+      run: pip install datafold-sdk
 
     - name: Kick off Datafold CI Run
-      run: datafold ci submit --ci-config-id 286 --pr-num ${{ steps.findPr.outputs.pr }} --diffs ./diffs_with_pr_num.txt
+      run: datafold ci submit --ci-config-id 286 --pr-num $OUTPUT1 --diffs ./diffs_with_pr_num.txt
       env:
         DATAFOLD_API_KEY: ${{ secrets.DATAFOLD_API_KEY }}
+        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
 
