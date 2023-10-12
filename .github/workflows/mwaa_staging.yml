@@ -32,9 +32,13 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: 'us-west-2'
+  lambda:
+    needs: deploy
+    runs-on: ubuntu-latest
 
-    - uses: jwalton/gh-find-current-pr@v1.3.0
-      id: findPR
+    steps:
+    - name: Begin lambda step
+      run: echo "This step runs after the successful S3 update and executes the lambda function"
 
     - uses: gagoar/invoke-aws-lambda@master
     # https://github.com/marketplace/actions/invoke-aws-lambda
@@ -44,7 +48,15 @@ jobs:
         REGION: 'us-west-2'
         FunctionName: invokeDatafoldAirflowStagingDAG
         Payload: '{ "schema_name_postfix": "_PR_NUM_${{ steps.findPr.outputs.pr }}" }'
+  
+  diffing:
+    needs: lambda
 
+    steps:
+
+    - uses: jwalton/gh-find-current-pr@v1.3.0
+      id: findPR
+      
     - name: Identify diffed SQL files
       # - git diff main --name-only
       # - change spaces into new lines
