@@ -32,8 +32,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - env:
-        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
 
     - uses: actions/checkout@main
       with:
@@ -54,8 +52,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - env:
-        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
 
     - uses: actions/checkout@main
       with:
@@ -69,6 +65,8 @@ jobs:
         REGION: 'us-west-2'
         FunctionName: invokeDatafoldAirflowStagingDAG
         Payload: '{ "schema_name_postfix": "_PR_NUM_$OUTPUT1" }'
+      env:
+        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
   
 
   diff:
@@ -76,8 +74,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - env:
-        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
 
     - uses: actions/checkout@main
       with:
@@ -95,6 +91,8 @@ jobs:
     
     - name: add PR num to diffs file
       run: sed 's|__DATAFOLD_CI_PR_NUM|$OUTPUT1|g' diffs.txt > diffs_with_pr_num.txt
+      env:
+        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
 
     - name: install Datafold SDK
       id: install-reqs
@@ -104,4 +102,5 @@ jobs:
       run: datafold ci submit --ci-config-id 286 --pr-num $OUTPUT1 --diffs ./diffs_with_pr_num.txt
       env:
         DATAFOLD_API_KEY: ${{ secrets.DATAFOLD_API_KEY }}
+        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
 
