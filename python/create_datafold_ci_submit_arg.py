@@ -1,7 +1,7 @@
 # assisted by chat.openai.com/
 import json
 
-input_data = [["FORESTFIRES", "ID"], ["BEARS", "ORG_ID"], ["SQUIRRELS", "ID"]]
+input_data = [["FORESTFIRES", "ID"], ["BEARS", "ID"], ["SQUIRRELS", "ID"]]
 
 output = []
 
