@@ -18,7 +18,7 @@ jobs:
 
     - name: execute py script # run file
       run: |
-        python python/create_datafold_ci_submit_arg.py
+        python ./python/create_datafold_ci_submit_arg.py
 
     - name: install Datafold SDK
       id: install-reqs
