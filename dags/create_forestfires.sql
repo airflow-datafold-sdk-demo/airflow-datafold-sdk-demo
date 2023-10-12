@@ -12,5 +12,6 @@ CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix 
             rh FLOAT,
             wind FLOAT,
             rain FLOAT,
-            area FLOAT
+            area FLOAT,
+            PRIMARY KEY (id)
         );
