@@ -44,7 +44,7 @@ jobs:
   determine_what_to_diff:
     needs: lambda
     runs-on: ubuntu-latest
-    
+
     steps:
     
     - uses: actions/checkout@main
@@ -74,9 +74,13 @@ jobs:
 
     steps: 
 
+    - uses: jwalton/gh-find-current-pr@v1.3.0
+      id: findPR
+
     - uses: actions/checkout@main
       with:
         fetch-depth: 0
+        
     - name: install Datafold SDK
       id: install-reqs
       run: pip install datafold-sdk
