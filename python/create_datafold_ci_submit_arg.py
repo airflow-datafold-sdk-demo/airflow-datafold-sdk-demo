@@ -17,4 +17,4 @@ for item in input_data:
     })
 
 output_json = json.dumps(output, separators=(',', ':'))
-print(output_json)
+print("'",output_json,"'",sep='')
