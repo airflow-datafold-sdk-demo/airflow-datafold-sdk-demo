@@ -27,6 +27,19 @@ jobs:
       id: step1
       
 
+  test:
+    needs: [get_pr_num]
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: test output
+      run: echo $OUTPUT1
+      env:
+        OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
+      
+
+
   upload_to_s3:
     needs: get_pr_num
     runs-on: ubuntu-latest
@@ -45,8 +58,8 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: 'us-west-2'
-  
-  
+
+
   lambda:
     needs: [upload_to_s3, get_pr_num]
     runs-on: ubuntu-latest
