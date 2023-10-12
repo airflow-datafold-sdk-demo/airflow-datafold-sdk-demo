@@ -52,18 +52,21 @@ jobs:
       # - remove dags/ prefix and .sql suffix
       run: echo $(git diff origin/${{ github.base_ref }} --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"  > ./git-diff.txt
 
-    - name: execute py script # run file
-      run: |
-        python python/create_datafold_ci_submit_arg.py > ./diffs.txt
+#    - name: execute py script # run file
+#      run: |
+#        python python/create_datafold_ci_submit_arg.py > ./diffs.txt
+    - name: create diffs file
+      run: python python/create_datafold_ci_submit_arg.py > ./diffs.txt
     
+    - name: add PR num to diffs file
+      run: sed 's|${{ steps_findPr_outputs_pr }}|$PR_NUM|g' diffs.txt > diffs2.txt
+      env:
+        PR_NUM: ${{ steps.findPr.outputs.pr }}
 #    - name: Store diffs in file
 #      run: echo '[{"prod":"DEMO.DATAFOLD_AIRFLOW.FORESTFIRES","pr":"DEMO.DATAFOLD_AIRFLOW_PR_NUM_${{ steps.findPr.outputs.pr }}.FORESTFIRES","pk":["ID"]},{"prod":"DEMO.DATAFOLD_AIRFLOW.BEARS","pr":"DEMO.DATAFOLD_AIRFLOW_PR_NUM_${{ steps.findPr.outputs.pr }}.BEARS","pk":["ID"]},{"prod":"DEMO.DATAFOLD_AIRFLOW.SQUIRRELS","pr":"DEMO.DATAFOLD_AIRFLOW_PR_NUM_${{ steps.findPr.outputs.pr }}.SQUIRRELS","pk":["ID"]}]' > ./diffs.txt
   
-    - name: test step
-      run: echo "$(<diffs.txt )" > ./datafold_ci_submit.txt
-   
     - name: Kick off Datafold CI Run
-      run: datafold ci submit --ci-config-id 286 --pr-num ${{ steps.findPr.outputs.pr }} --diffs ./datafold_ci_submit.txt
+      run: datafold ci submit --ci-config-id 286 --pr-num ${{ steps.findPr.outputs.pr }} --diffs ./diffs2.txt
       env:
         DATAFOLD_API_KEY: ${{ secrets.DATAFOLD_API_KEY }}
 

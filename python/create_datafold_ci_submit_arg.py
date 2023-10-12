@@ -7,7 +7,7 @@ output = []
 
 for item in input_data:
     prod_name = f"DEMO.DATAFOLD_AIRFLOW.{item[0]}"
-    pr_name = f"DEMO.DATAFOLD_AIRFLOW_PR_NUM_${{{{ steps.findPr.outputs.pr }}}}.{item[0]}"
+    pr_name = f"DEMO.DATAFOLD_AIRFLOW_PR_NUM_${{{{ steps_findPr_outputs_pr }}}}.{item[0]}"
     pk = [item[1]]
 
     output.append({
