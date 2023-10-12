@@ -21,6 +21,7 @@ jobs:
     steps:
 
     - uses: jwalton/gh-find-current-pr@v1.3.0
+      id: findPR
     
     - run: echo "test={{ steps.findPr.outputs.pr }}" >> "$GITHUB_OUTPUT"
       id: step1
