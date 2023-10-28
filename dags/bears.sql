@@ -14,7 +14,7 @@ TRUNCATE table DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_
 INSERT INTO DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }}
 (id, name, species, weight, length, hobby)
 VALUES
-(1, 'Bruno', 'American Black Bear', 300, 6.5, 'Fishing'),
+(1, 'Bruno', 'American Black Bear', 299, 6.5, 'Fishing'),
 (2, 'Honey', 'Grizzly Bear', 900, 8.2, 'Hiking'),
 (3, 'Teddy', 'Polar Bear', 1100, 9.5, 'Swimming'),
 (4, 'Cubby', 'Brown Bear', 700, 7.9, 'Berry Picking'),
