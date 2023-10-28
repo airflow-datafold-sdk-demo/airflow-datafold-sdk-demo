@@ -103,6 +103,14 @@ jobs:
       # - remove dags/ prefix and .sql suffix
       run: echo $(git diff origin/${{ github.base_ref }} --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"  > ./git-diff.txt
 
+      # git-diff.txt is currently a file with a list of model names, which gets translated
+      # into a format that can be submitted to the Datafold sdk (in the "create diffs file" step, 
+      # with the output diffs.txt).
+      # The next step TODO is to use the GraphQL API to find the downstreams of these models
+      # in git-diff.txt and add the names to a "downstreams" file. that file should then have any duplicates
+      # removed from it; and then should be combined with git-diff.text; and then any duplicates
+      # should be removed from THAT. the output should be diffs.txt and then we go from there.
+
     - name: create diffs file
       run: python python/combined_script.py git-diff.txt > ./diffs.txt
     
