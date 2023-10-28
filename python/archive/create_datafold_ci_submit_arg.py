@@ -6,8 +6,8 @@ input_data = [["FORESTFIRES", ["ID"]], ["BEARS", ["ID", "HOBBY"]], ["SQUIRRELS",
 output = []
 
 for item in input_data:
-    prod_name = f"DEMO.DATAFOLD_AIRFLOW.{item[0]}"
-    pr_name = f"DEMO.DATAFOLD_AIRFLOW_PR_NUM___DATAFOLD_CI_PR_NUM.{item[0]}"
+    prod_name = f"SDK_DEMO.DATAFOLD_AIRFLOW.{item[0]}"
+    pr_name = f"SDK_DEMO.DATAFOLD_AIRFLOW_PR_NUM___DATAFOLD_CI_PR_NUM.{item[0]}"
     pk = item[1]
 
     output.append({
