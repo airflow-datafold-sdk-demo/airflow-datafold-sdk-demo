@@ -1,6 +1,7 @@
 CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }}
         (
-            id INT
+            id INT,
+            PRIMARY KEY (id)
         ); 
 
 TRUNCATE table DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }};
