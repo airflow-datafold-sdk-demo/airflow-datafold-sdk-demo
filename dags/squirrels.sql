@@ -8,7 +8,7 @@ CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix 
             favorite_nut VARCHAR(25),
             leap_distance NUMERIC,
             hobby VARCHAR(25),
-            PRIMARY KEY (id) 
+            PRIMARY KEY (id)  
         );
 
 TRUNCATE table DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }};
