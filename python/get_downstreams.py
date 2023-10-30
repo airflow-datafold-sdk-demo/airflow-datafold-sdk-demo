@@ -33,7 +33,7 @@ if __name__ == "__main__":
     api_key = sys.argv[1]
 
     # Read input file containing table names
-    with open('/Users/leoebfolsom/Downloads/input.txt', 'r') as input_file:
+    with open('./git-diff.txt', 'r') as input_file:
         table_names = [line.strip() for line in input_file]
 
     unique_paths = set()
