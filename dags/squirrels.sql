@@ -18,7 +18,7 @@ INSERT INTO DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_nam
 VALUES
 (1, 'Charlie', 'Eastern Gray Squirrel', 300, 10.5, 'Acorn', 2.5, 'Tree Climbing'),
 (2, 'Samantha', 'Fox Squirrel', 400, 12.2, 'Pecan', 3.0, 'Burrowing'),
-(3, 'Rusty', 'Red Squirrel', 250, 9.8, 'Pine Nut', 2.2, 'Nut Hoarding'),
+(3, 'Rusty', 'Red Squirrel', 251, 9.8, 'Pine Nut', 2.2, 'Nut Hoarding'),
 (4, 'Sandy', 'Ground Squirrel', 350, 11.0, 'Hazelnut', 2.8, 'Digging Tunnels'),
 (5, 'Glider', 'Flying Squirrel', 150, 8.5, 'Walnut', 4.2, 'Glider'),
 (6, 'Snowy', 'Arctic Ground Squirrel', 450, 14.7, 'Almond', 3.5, 'Hibernating'),

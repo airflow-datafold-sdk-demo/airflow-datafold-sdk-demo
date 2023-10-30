@@ -16,7 +16,7 @@ INSERT INTO DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_nam
 VALUES
 (1, 'Bruno', 'American Black Bear', 297, 6.5, 'Fishing'),
 (2, 'Honey', 'Grizzly Bear', 900, 8.2, 'Hiking'),
-(3, 'TeddyB', 'Polar Bear', 1100, 9.5, 'Swimming'),
+(3, 'TeddyBB', 'Polar Bear', 1100, 9.5, 'Swimming'),
 (4, 'Cubby', 'Brown Bear', 700, 7.9, 'Berry Picking'),
 (5, 'Munch', 'Kodiak Bear', 1500, 9.0, 'Salmon Fishing'),
 (6, 'BamBam', 'Panda Bear', 300, 5.5, 'Bamboo Eating'),
