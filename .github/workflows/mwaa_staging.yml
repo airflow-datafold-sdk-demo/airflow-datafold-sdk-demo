@@ -110,7 +110,7 @@ jobs:
 
 
     - name: Combine git-diff.txt and downstreams.txt
-      run: cat ./downstreams.txt ./git-diff.txt | sort | uniq > combined.txt && cat combined.txt
+      run: cat ./downstreams.txt ./git-diff.txt | sort -f | uniq | tr '[:lower:]' '[:upper:]' > combined.txt && cat combined.txt
 
     - name: create diffs file
       run: python python/combined_script.py combined.txt > ./diffs.txt && cat ./diffs.txt
