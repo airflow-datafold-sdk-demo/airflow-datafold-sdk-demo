@@ -41,16 +41,20 @@ if __name__ == "__main__":
     # Iterate through table names and make API requests with the API key
     for table_name in table_names:
         response = make_api_request(api_key, table_name)
-        if response and 'data' in response and 'lineage' in response['data']:
-            primary = response['data']['lineage']['primary']
-            entities = response['data']['lineage']['entities']
+        
+        if response is not None:  # Check if the response is not None
+            if 'data' in response and 'lineage' in response['data']:
+                primary = response['data']['lineage']['primary']
+                entities = response['data']['lineage']['entities']
 
-            if 'prop' in primary and 'path' in primary['prop'] and primary['prop']['path']:
-                unique_paths.add(primary['prop']['path'])
+                if 'prop' in primary and 'path' in primary['prop'] and primary['prop']['path']:
+                    unique_paths.add(primary['prop']['path'])
 
-            for entity in entities:
-                if 'prop' in entity and 'path' in entity['prop'] and entity['prop']['path']:
-                    unique_paths.add(entity['prop']['path'])
+                for entity in entities:
+                    if 'prop' in entity and 'path' in entity['prop'] and entity['prop']['path']:
+                        unique_paths.add(entity['prop']['path'])
+        else:
+            print(f"API request for table {table_name} failed")
 
     # Print unique paths to stdout
     for path in unique_paths:
