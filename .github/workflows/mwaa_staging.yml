@@ -115,22 +115,16 @@ jobs:
       run: python python/get_downstreams.py $DATAFOLD_API_KEY > ./downstreams.txt
       env:
         DATAFOLD_API_KEY: ${{ secrets.DATAFOLD_API_KEY }}
-      # git-diff.txt is currently a file with a list of model names, which gets translated
-      # into a format that can be submitted to the Datafold sdk (in the "create diffs file" step, 
-      # with the output diffs.txt).
-      # The next step TODO is to use the GraphQL API to find the downstreams of these models
-      # in git-diff.txt and add the names to a "downstreams" file. that file should then have any duplicates
-      # removed from it; and then should be combined with git-diff.text; and then any duplicates
-      # should be removed from THAT. the output should be diffs.txt and then we go from there.
+=
 
     - name: Combine git-diff.txt and downstreams.txt
       run: cat file1.txt file2.txt | sort | uniq > combined.txt
 
     - name: create diffs file
-      run: python python/combined_script.py combined.txt > ./diffs.txt
+      run: python python/combined_script.py combined.txt > ./diffs.txt && cat ./diffs.txt
     
     - name: add PR num to diffs file
-      run: sed "s|__DATAFOLD_CI_PR_NUM|$OUTPUT1|g" diffs.txt > diffs_with_pr_num.txt
+      run: sed "s|__DATAFOLD_CI_PR_NUM|$OUTPUT1|g" diffs.txt > diffs_with_pr_num.txt && cat diffs_with_pr_num.txt
       env:
         OUTPUT1: ${{needs.get_pr_num.outputs.output1}} # this is the pr num
 
