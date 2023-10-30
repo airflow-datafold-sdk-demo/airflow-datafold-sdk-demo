@@ -6,7 +6,7 @@ import sys
 # Function to find and store the contents within parentheses
 def find_primary_key_contents(file_path):
     contents_list = []
-    with open('dags/' + file_path + '.sql', 'r') as file:
+    with open('dags/' + file_path.lower() + '.sql', 'r') as file:
         for line in file:
             # Remove leading and trailing whitespace and make the search case-insensitive
             line = line.strip().lower()
