@@ -34,7 +34,7 @@ if __name__ == "__main__":
 
     # Read input file containing table names
     with open('./git-diff.txt', 'r') as input_file:
-        table_names = [line.strip() for line in input_file]
+        table_names = [line.strip().upper() for line in input_file]
         print("table names:")
         print(table_names)
 
