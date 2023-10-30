@@ -103,6 +103,9 @@ jobs:
       # - remove dags/ prefix and .sql suffix
       run: echo $(git diff origin/${{ github.base_ref }} --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"  > ./git-diff.txt
 
+    - name: display table names
+      run: cat ./git-diff.txt
+
     - name: Create file with all downstreams of diffed files
       run: python python/get_downstreams.py $DATAFOLD_API_KEY > ./downstreams.txt
       env:
