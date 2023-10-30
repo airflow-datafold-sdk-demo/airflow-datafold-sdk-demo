@@ -101,24 +101,16 @@ jobs:
       # - change spaces into new lines
       # - remove lines not containing .sql 
       # - remove dags/ prefix and .sql suffix
-      run: echo $(git diff origin/${{ github.base_ref }} --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"  > ./git-diff.txt
-
- #   - name: display table names
- #     run: cat ./git-diff.txt
-
- #   - name: test
- #     run: python python/test.py $DATAFOLD_API_KEY
- #     env:
- #       DATAFOLD_API_KEY: ${{ secrets.DATAFOLD_API_KEY }}
+      run: echo $(git diff origin/${{ github.base_ref }} --name-only) | tr " " "\n" | sed '/\.sql/!d' |  sed -e "s/^dags\///" -e "s/.sql$//"  > ./git-diff.txt && ./git-diff.txt
 
     - name: Create file with all downstreams of diffed files
-      run: python python/get_downstreams.py $DATAFOLD_API_KEY > ./downstreams.txt
+      run: python python/get_downstreams.py $DATAFOLD_API_KEY > ./downstreams.txt && cat ./downstreams.txt
       env:
         DATAFOLD_API_KEY: ${{ secrets.DATAFOLD_API_KEY }}
-=
+
 
     - name: Combine git-diff.txt and downstreams.txt
-      run: cat file1.txt file2.txt | sort | uniq > combined.txt
+      run: cat file1.txt file2.txt | sort | uniq > combined.txt && cat combined.txt
 
     - name: create diffs file
       run: python python/combined_script.py combined.txt > ./diffs.txt && cat ./diffs.txt
