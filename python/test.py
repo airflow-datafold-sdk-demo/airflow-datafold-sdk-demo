@@ -10,7 +10,7 @@ def make_api_request(api_key, table_name):
         'Authorization': api_key,
         'Cookie': 'browser_session_id=None'
     }
-    query = f'query GetDownstreamTables($primaryUid: ID! = "dwh_table:6612.SDK_DEMO.DATAFOLD_AIRFLOW.{table_name}", $lineageFilter: LineageFilter = {{ depthUpstream: 0, depthDownstream: 100 }}) {{ lineage(primaryUid: $primaryUid, lineageFilter: $lineageFilter) {{ primary {{ ... on Table {{ uid prop {{ path }} }} }} entities {{ ...on Table {{ uid prop {{ path }} }} }} }} }}'
+    query = f'query GetDownstreamTables($primaryUid: ID! = "dwh_table:6612.SDK_DEMO.DATAFOLD_AIRFLOW.BEARS", $lineageFilter: LineageFilter = {{ depthUpstream: 0, depthDownstream: 100 }}) {{ lineage(primaryUid: $primaryUid, lineageFilter: $lineageFilter) {{ primary {{ ... on Table {{ uid prop {{ path }} }} }} entities {{ ...on Table {{ uid prop {{ path }} }} }} }} }}'
 
     data = {
         'query': query,
