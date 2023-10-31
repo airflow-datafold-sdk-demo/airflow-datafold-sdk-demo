@@ -1,6 +1,6 @@
 CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }}
         (
-            favorite_nut INT,
+            favorite_nut VARCHAR(25),
             average_leap_distance NUMERIC,
             PRIMARY KEY (favorite_nut)
         ); 
