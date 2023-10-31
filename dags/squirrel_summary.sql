@@ -1,13 +1,12 @@
 CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }}
         (
-            nut INT,
+            favorite_nut INT,
             average_leap_distance NUMERIC,
-            PRIMARY KEY (id)
+            PRIMARY KEY (favorite_nut)
         ); 
 
 TRUNCATE table DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }};
 
-INSERT INTO DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }} (nut, average_leap_distance)
-SELECT nut, AVG(leap_distance) FROM DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.TOP_SQUIRRELS
-ORDER BY id DESC
-LIMIT 8;
+INSERT INTO DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }} (favorite_nut, average_leap_distance)
+SELECT favorite_nut, AVG(leap_distance) as average_leap_distance FROM DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.TOP_SQUIRRELS
+GROUP BY favorite_nut;
