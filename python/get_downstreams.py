@@ -40,11 +40,7 @@ if __name__ == "__main__":
 
     # Iterate through table names and make API requests with the API key
     for table_name in table_names:
-        print(table_name)
         response = make_api_request(api_key, table_name)
-        print("response:")
-        print(response)
-        
         if response is not None:  # Check if the response is not None
             if 'data' in response and 'lineage' in response['data']:
                 primary = response['data']['lineage']['primary']
