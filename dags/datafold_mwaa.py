@@ -76,6 +76,14 @@ with DAG(
             "schema_name_postfix":"" # The postfix is added to the production schema name
             }, 
     )
+    create_squirrel_summary_table = SnowflakeOperator(
+        task_id="create_squirrel_summary_table",
+        sql='squirrel_summary.sql',
+        params={
+            "table_name": "squirrel_summary", 
+            "schema_name_postfix":"" # The postfix is added to the production schema name
+            }, 
+    )
     begin = EmptyOperator(task_id="begin")
     end = EmptyOperator(task_id="end")
 
@@ -84,6 +92,7 @@ with DAG(
         create_pr_schema,
         [create_forestfires_table,create_bears_table,create_squirrels_table],
         create_top_squirrels_table,
+        create_squirrel_summary_table,
         end,
     )
     
