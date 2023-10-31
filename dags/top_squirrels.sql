@@ -7,6 +7,6 @@ CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix 
 TRUNCATE table DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }};
 
 INSERT INTO DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }} (id)
-SELECT id FROM DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.SQUIRRELS
+SELECT id+1 as id FROM DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.SQUIRRELS
 ORDER BY id DESC
-LIMIT 6;
+LIMIT 8;
