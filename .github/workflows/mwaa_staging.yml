@@ -87,7 +87,7 @@ jobs:
         OUTPUT1: "_PR_NUM_${{needs.get_pr_num.outputs.output1}}" # this is the pr num
       
     - name: Require Lambda response before proceeding
-      run: echo '${{ fromJSON(steps.lambda.outputs.response).Payload }}'
+      run: echo '${{ fromJSON(steps.lambda.outputs.response).Payload }}' > invocation-response.json
   
 
   diff:
