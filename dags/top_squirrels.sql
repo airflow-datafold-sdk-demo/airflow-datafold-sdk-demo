@@ -21,8 +21,8 @@ SELECT
     weight, 
     length, 
     favorite_nut, 
-    case when favorite_nut = 'Macadamia' then leap_distance - 0.25 else leap_distance end as leap_distance,
+    leap_distance,
     hobby
 FROM DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.SQUIRRELS
-ORDER BY id DESC
-LIMIT 7;
+ORDER BY weight DESC
+LIMIT 9;
