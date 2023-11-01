@@ -16,7 +16,7 @@ CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix 
             PRIMARY KEY (id)
         );
 
-TRUNCATE table DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }};
+-- TRUNCATE table DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }};
 
 INSERT INTO DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }}
 (id, name, mon, date, ffmc, dmc, dc, isi, temp, rh, wind, rain, area)
