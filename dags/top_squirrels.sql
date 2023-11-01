@@ -25,4 +25,4 @@ SELECT
     hobby
 FROM DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.SQUIRRELS
 ORDER BY weight DESC
-LIMIT 6;
+LIMIT 8;
