@@ -75,15 +75,19 @@ jobs:
 
     - uses: gagoar/invoke-aws-lambda@master
     # https://github.com/marketplace/actions/invoke-aws-lambda
+      id: lambda
       with:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         REGION: 'us-west-2'
         FunctionName: invokeDatafoldAirflowStagingDAG
         Payload: '{ "schema_name_postfix": "${{ env.OUTPUT1 }}" }' 
-       # Payload: $(echo '{ "schema_name_postfix": "'$OUTPUT1'" }' | jq .)
+
       env:
         OUTPUT1: "_PR_NUM_${{needs.get_pr_num.outputs.output1}}" # this is the pr num
+      
+    - name: Require Lambda response before proceeding
+      run: echo '${{ fromJSON(steps.lambda.outputs.response).Payload }}'
   
 
   diff:
