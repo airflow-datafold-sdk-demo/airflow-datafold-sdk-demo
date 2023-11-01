@@ -14,6 +14,15 @@ CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix 
 TRUNCATE table DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }};
 
 INSERT INTO DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.{{ params.table_name }} (id, name, species, weight, length, favorite_nut, leap_distance, hobby)
-SELECT id, name, species, weight, length, favorite_nut, leap_distance, hobby FROM DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.SQUIRRELS
-ORDER BY id DESC
-LIMIT 8;
+SELECT 
+    id,
+    name, 
+    species, 
+    weight, 
+    length, 
+    favorite_nut, 
+    leap_distance,
+    hobby
+FROM DATAFOLD_AIRFLOW{{ params.schema_name_postfix }}.SQUIRRELS
+ORDER BY weight DESC
+LIMIT 9;
