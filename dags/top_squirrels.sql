@@ -6,7 +6,7 @@ CREATE OR REPLACE TRANSIENT TABLE DATAFOLD_AIRFLOW{{ params.schema_name_postfix 
             weight INT,
             length FLOAT,
             favorite_nut VARCHAR(25),
-            leap_distance NUMERIC,
+            leap_distance NUMERIC(38,2),
             hobby VARCHAR(25),
             PRIMARY KEY (id) 
         ); 
